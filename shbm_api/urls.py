@@ -4,7 +4,7 @@ from django.conf.urls import include
 from . import views
 
 urlpatterns = [
-    re_path(r'^api/v1/hosts/(?P<pk>........-....-....-....-............+)$', # Url to get update or delete a movie
+    re_path(r'^hosts/(?P<pk>........-....-....-....-............+)$',
         views.heartbeat.as_view(),
         name='heartbeat'
     ),
