@@ -3,6 +3,7 @@ from ...serializers import hostserializer
 from ...models import host
 from time import sleep, time
 from subprocess import Popen
+
 class Command(BaseCommand):
     def handle(self, **options):
         while True:
