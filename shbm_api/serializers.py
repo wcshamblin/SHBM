@@ -5,4 +5,4 @@ from .models import host
 class hostserializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = host
-        fields = ('idstr', 'hostname')
+        fields = ('active', 'idstr', 'hostname', 'heartrate', 'down', 'ip')
