@@ -8,4 +8,7 @@ urlpatterns = [
         views.heartbeat.as_view(),
         name='heartbeat'
     ),
+    # path('hosts/',
+    # 	views.createhost.as_view(),
+    # 	name='createhost')
 ]
