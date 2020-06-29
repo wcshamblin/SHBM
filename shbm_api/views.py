@@ -35,3 +35,12 @@ class heartbeat(RetrieveUpdateDestroyAPIView):
         else:
             ip = request.META.get('REMOTE_ADDR')
         return ip
+
+# class createhost(RetrieveUpdateDestroyAPIView):
+#     http_method_names = ['post']
+#     def post(self,request):
+#         serializer = hostserializer(data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data["idstr"], status=status.HTTP_201_CREATED)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
