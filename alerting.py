@@ -21,5 +21,5 @@ def send_email(user, pwd, recipient, subject, body):
     server.login(user, pwd)
     server.sendmail(user, recipient if isinstance(recipient, list) else [recipient], message)
     server.close()
-
+print("Sending alert")
 send_email(config["smtpusr"], config["smtppass"], config["email-to"], args.hostname+" down", args.hostname+" @ "+args.ip+" - down")
