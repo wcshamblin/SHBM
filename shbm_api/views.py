@@ -6,8 +6,15 @@ from django.http import Http404
 from .models import host
 from .serializers import hostserializer
 from time import time
-
-class heartbeat(RetrieveUpdateDestroyAPIView):
+from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm
+from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
+from django.views import generic
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import LoginView, LogoutView
+class HeartBeat(RetrieveUpdateDestroyAPIView):
     http_method_names = ['get']
 
     def get_queryset(self, pk):
@@ -35,6 +42,60 @@ class heartbeat(RetrieveUpdateDestroyAPIView):
         else:
             ip = request.META.get('REMOTE_ADDR')
         return ip
+
+
+class SignUp(generic.CreateView):
+    form_class = UserCreationForm
+    success_url = reverse_lazy('login')
+    template_name = 'signup.html'
+
+class Login(LoginView):
+    form_class = AuthenticationForm
+    template_name = 'login.html'
+    success_url = reverse_lazy('login')
+
+class Logout(LogoutView):
+    success_url = reverse_lazy('login')
+
+class Hosts(LoginRequiredMixin, generic.ListView):
+    login_url = '/login/'
+    def get_queryset(self):
+        if not self.request.user.is_authenticated:
+            return None
+        return host.objects.filter(owner=self.request.user)
+    model = host
+    template_name = 'hosts.html'  # Specify your own template name/location
+
+class CreateHost(LoginRequiredMixin, generic.CreateView):
+    login_url = '/login/'
+    model = host
+    fields = ["active", "hostname", "recipient1", "recipient2"]
+    success_url = "/hosts/"
+    template_name = "createhost.html"
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.owner = self.request.user
+        self.object.save()
+        return super().form_valid(form)
+
+class Host(LoginRequiredMixin, generic.DetailView):
+    login_url = '/login/'
+    model = host
+    template_name = 'host.html'
+
+class DeleteHost(LoginRequiredMixin, generic.DeleteView):
+    login_url = '/login/'
+    model = host
+    success_url = "/hosts/"
+
+class EditHost(LoginRequiredMixin, generic.UpdateView):
+    login_url = '/login/'
+    model = host
+    success_url = "/hosts/"
+    fields = ["active", "hostname", "recipient1", "recipient2"]
+    template_name = 'host.html'
+
+
 
 # class createhost(RetrieveUpdateDestroyAPIView):
 #     http_method_names = ['post']

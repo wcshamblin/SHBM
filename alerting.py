@@ -4,8 +4,9 @@ import argparse
 from json import load
 
 ps = argparse.ArgumentParser()
-ps.add_argument("hostname", type=str, help="Hostname")
-ps.add_argument("ip", type=str, help="IP address")
+ps.add_argument("hostname", type=str)
+ps.add_argument("ip", type=str)
+ps.add_argument('-r','--recipients', nargs='+', required=True)
 
 args = ps.parse_args()
 
@@ -21,5 +22,5 @@ def send_email(user, pwd, recipient, subject, body):
     server.login(user, pwd)
     server.sendmail(user, recipient if isinstance(recipient, list) else [recipient], message)
     server.close()
-print("Sending alert")
-send_email(config["smtpusr"], config["smtppass"], config["email-to"], args.hostname+" down", args.hostname+" @ "+args.ip+" - down")
+print(args.hostname, "is down, sending an alert to", args.recipients)
+send_email(config["smtpusr"], config["smtppass"], args.recipients, args.hostname+" down", args.hostname+" @ "+args.ip+" - down")

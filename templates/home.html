@@ -1,0 +1,45 @@
+<!-- templates/home.html-->
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+  Hi {{ user.username }}!
+  Would you like to view your <a href="{% url 'Hosts' %}">hosts</a>?
+{% else %}
+  <p>You cannot create hosts until you are <a href="{% url 'Login' %}">logged in</a>.</p>
+  <br>
+{% endif %}
+  <nav class="navbar navbar-expand-lg navbar-light fixed-bottom">
+    <div class="container">
+      <a class="navbar-brand" href="/"><span class="text">SHBM</span></a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="/">Home</a>
+              <span class="sr-only">(current)</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/hosts">Hosts</a>
+          </li>
+          {% if user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link" href="/logout/">Log out</a>
+          </li>
+
+          {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="/login/">Log in</a>
+          </li>
+
+        </ul>
+      </div>
+    </div>
+  </nav>
+{% endif %}
+{% endblock %}
